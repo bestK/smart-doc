@@ -112,6 +112,11 @@ public class ApiConfig {
     /**
      * List of change log
      */
+    private String staticDesc;
+
+    /**
+     * List of change log
+     */
     private List<RevisionLog> revisionLogs;
 
     /**
@@ -910,5 +915,13 @@ public class ApiConfig {
 
     public void setHighlightStyleLink(String highlightStyleLink) {
         this.highlightStyleLink = highlightStyleLink;
+    }
+
+    public String getStaticDesc() {
+        return staticDesc;
+    }
+
+    public void setStaticDesc(String staticDesc) {
+        this.staticDesc = staticDesc;
     }
 }

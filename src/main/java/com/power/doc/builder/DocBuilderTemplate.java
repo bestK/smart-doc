@@ -22,6 +22,8 @@
  */
 package com.power.doc.builder;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.power.common.util.CollectionUtil;
 import com.power.common.util.DateTimeUtil;
 import com.power.common.util.FileUtil;
@@ -30,15 +32,11 @@ import com.power.doc.constants.HighlightStyle;
 import com.power.doc.constants.TemplateVariable;
 import com.power.doc.constants.TornaConstants;
 import com.power.doc.factory.BuildTemplateFactory;
-import com.power.doc.model.ApiAllData;
-import com.power.doc.model.ApiConfig;
-import com.power.doc.model.ApiDoc;
-import com.power.doc.model.ApiDocDict;
-import com.power.doc.model.ApiErrorCode;
-import com.power.doc.model.ApiMethodDoc;
+import com.power.doc.model.*;
 import com.power.doc.template.IDocBuildTemplate;
 import com.power.doc.utils.BeetlTemplateUtil;
 import com.power.doc.utils.DocUtil;
+import com.power.doc.utils.JsonUtil;
 import com.thoughtworks.qdox.JavaProjectBuilder;
 import org.beetl.core.Template;
 
@@ -46,11 +44,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Logger;
 
-import static com.power.doc.constants.DocGlobalConstants.CSS_CDN;
-import static com.power.doc.constants.DocGlobalConstants.CSS_CDN_CH;
-import static com.power.doc.constants.DocGlobalConstants.FILE_SEPARATOR;
-import static com.power.doc.constants.DocGlobalConstants.SEARCH_JS_OUT;
+import static com.power.doc.constants.DocGlobalConstants.*;
 
 /**
  * @author yu 2019/9/26.
@@ -58,6 +54,8 @@ import static com.power.doc.constants.DocGlobalConstants.SEARCH_JS_OUT;
 public class DocBuilderTemplate extends BaseDocBuilderTemplate {
 
     private static long now = System.currentTimeMillis();
+
+    private static Logger log = Logger.getLogger(DocBuilderTemplate.class.getName());
 
     /**
      * get all api data
@@ -131,6 +129,7 @@ public class DocBuilderTemplate extends BaseDocBuilderTemplate {
         FileUtil.mkdirs(outPath);
         List<ApiErrorCode> errorCodeList = DocUtil.errorCodeDictToList(config);
         Template tpl = BeetlTemplateUtil.getByName(template);
+
         String style = config.getStyle();
         tpl.binding(TemplateVariable.STYLE.getVariable(), style);
         tpl.binding(TemplateVariable.HIGH_LIGHT_CSS_LINK.getVariable(), config.getHighlightStyleLink());
@@ -138,6 +137,7 @@ public class DocBuilderTemplate extends BaseDocBuilderTemplate {
         tpl.binding(TemplateVariable.API_DOC_LIST.getVariable(), apiDocList);
         tpl.binding(TemplateVariable.ERROR_CODE_LIST.getVariable(), errorCodeList);
         tpl.binding(TemplateVariable.VERSION_LIST.getVariable(), config.getRevisionLogs());
+        tpl.binding(TemplateVariable.STATIC_DESC.getVariable(), config.getStaticDesc());
         tpl.binding(TemplateVariable.VERSION.getVariable(), now);
         tpl.binding(TemplateVariable.INDEX_ALIAS.getVariable(), index);
         tpl.binding(TemplateVariable.CREATE_TIME.getVariable(), strTime);
@@ -147,7 +147,7 @@ public class DocBuilderTemplate extends BaseDocBuilderTemplate {
         tpl.binding(TemplateVariable.DISPLAY_REQUEST_PARAMS.getVariable(), config.isRequestParamsTable());
         tpl.binding(TemplateVariable.DISPLAY_RESPONSE_PARAMS.getVariable(), config.isResponseParamsTable());
         setCssCDN(config, tpl);
-
+        log.info(String.format("当前模板:%s ", template));
         setDirectoryLanguageVariable(config, tpl);
         List<ApiDocDict> apiDocDictList = DocUtil.buildDictionary(config, javaProjectBuilder);
         tpl.binding(TemplateVariable.DICT_LIST.getVariable(), apiDocDictList);
