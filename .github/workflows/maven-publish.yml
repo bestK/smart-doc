@@ -32,4 +32,4 @@ jobs:
           <profiles><profile><repositories><repository><id>gh</id><url>https://maven.pkg.github.com/$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $1}')/*</url></repository></repositories></profile></profiles>
           </settings>" > ~/.m2/settings.xml
           REPO="github::default::https://maven.pkg.github.com/${GITHUB_REPOSITORY}"
-          mvn deploy -DSkipTests=true -DaltReleaseDeploymentRepository="${REPO}" -DaltSnapshotDeploymentRepository="${REPO}"
+          mvn deploy -Dmaven.test.skip=true -DSkipTests=true -DaltReleaseDeploymentRepository="${REPO}" -DaltSnapshotDeploymentRepository="${REPO}"
