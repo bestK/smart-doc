@@ -22,14 +22,18 @@
  */
 package com.power.doc.model.request;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.power.doc.model.FormData;
+import com.power.doc.utils.JsonUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
 /**
  * @author yu 2019/12/22.
  */
-
 public class ApiRequestExample {
 
     /**
@@ -59,7 +63,42 @@ public class ApiRequestExample {
     }
 
     public String getJsonBody() {
-        return jsonBody;
+        if (!isJSONValid(jsonBody)) {
+            return jsonBody;
+        }
+
+        JsonObject paramMap = new JsonObject();
+
+        Object obj = parseJson(jsonBody);
+        System.out.println("\n---------------\n" + jsonBody + "\n---------------------");
+        paramMap.addProperty("params", new Gson().toJson(obj));
+        paramMap.addProperty("sign", "sign");
+        paramMap.addProperty("timestamp", "timestamp");
+        paramMap.addProperty("nonce_str", "nonce_str");
+        paramMap.addProperty("app_key", "appKey");
+
+        return JsonUtil.toPrettyJson(paramMap);
+    }
+
+    private Object parseJson(String jsonBody) {
+        try {
+            return new Gson().fromJson(jsonBody, JsonObject.class);
+        } catch (Exception ignored) {
+            try {
+                return new Gson().fromJson(jsonBody, JsonArray.class);
+            } catch (Exception ignored1) {
+                return new Object();
+            }
+        }
+    }
+
+    private boolean isJSONValid(String jsonInString) {
+        try {
+            new Gson().fromJson(jsonInString, Object.class);
+            return true;
+        } catch (com.google.gson.JsonSyntaxException ex) {
+            return false;
+        }
     }
 
     public ApiRequestExample setJsonBody(String jsonBody) {
@@ -102,4 +141,5 @@ public class ApiRequestExample {
         this.exampleBody = exampleBody;
         return this;
     }
+
 }

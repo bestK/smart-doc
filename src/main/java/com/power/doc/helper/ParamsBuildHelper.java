@@ -30,11 +30,7 @@ import com.power.doc.constants.DocAnnotationConstants;
 import com.power.doc.constants.DocGlobalConstants;
 import com.power.doc.constants.DocTags;
 import com.power.doc.constants.ValidatorAnnotations;
-import com.power.doc.model.ApiConfig;
-import com.power.doc.model.ApiDataDictionary;
-import com.power.doc.model.ApiParam;
-import com.power.doc.model.CustomField;
-import com.power.doc.model.DocJavaField;
+import com.power.doc.model.*;
 import com.power.doc.utils.*;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
@@ -43,19 +39,10 @@ import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.power.doc.constants.DocGlobalConstants.ARRAY;
-import static com.power.doc.constants.DocGlobalConstants.JAVA_OBJECT_FULLY;
-import static com.power.doc.constants.DocGlobalConstants.JSON_PROPERTY_READ_ONLY;
-import static com.power.doc.constants.DocGlobalConstants.JSON_PROPERTY_WRITE_ONLY;
-import static com.power.doc.constants.DocGlobalConstants.NO_COMMENTS_FOUND;
+import static com.power.doc.constants.DocGlobalConstants.*;
 
 /**
  * @author yu 2019/12/21.

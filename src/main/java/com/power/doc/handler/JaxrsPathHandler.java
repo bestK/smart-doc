@@ -50,6 +50,7 @@ import static com.power.doc.constants.DocTags.IGNORE;
  * @author Zxq
  */
 public class JaxrsPathHandler {
+
     /**
      * ANNOTATION_NAMES
      */
@@ -110,6 +111,7 @@ public class JaxrsPathHandler {
                 return null;
             }
             shortUrl = StringUtil.removeQuotes(shortUrl);
+            System.out.println(">> " + method.getDeclaringClass().getSimpleName() + "." + method.getName());
             List<String> urls = DocUtil.split(shortUrl);
             url = String.join(DocGlobalConstants.PATH_DELIMITER, serverUrl, contextPath, baseUrl, shortUrl);
             shortUrl = String.join(DocGlobalConstants.PATH_DELIMITER, DocGlobalConstants.PATH_DELIMITER, contextPath, baseUrl, shortUrl);

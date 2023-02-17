@@ -1,6 +1,9 @@
 <%if(isNotEmpty(projectName)){%>
 # ${projectName}
 <%}%>
+<%if(isNotEmpty(staticDesc)){%>
+${staticDesc}
+<%}%>
 <%if(isNotEmpty(revisionLogList)){%>
 Version |  Update Time  | Status | Author |  Description
 ---|---|---|---|---

@@ -103,6 +103,7 @@ public class SolonRequestMappingHandler {
                 return null;
             }
             shortUrl = StringUtil.removeQuotes(shortUrl);
+            System.out.println(">> " + method.getDeclaringClass().getSimpleName() + "." + method.getName());
             List<String> urls = DocUtil.split(shortUrl);
             if (urls.size() > 1) {
                 url = DocUrlUtil.getMvcUrls(serverUrl, contextPath + "/" + controllerBaseUrl, urls);

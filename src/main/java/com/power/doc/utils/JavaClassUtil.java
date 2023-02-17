@@ -28,15 +28,7 @@ import com.power.doc.constants.DocAnnotationConstants;
 import com.power.doc.constants.DocValidatorAnnotationEnum;
 import com.power.doc.constants.ValidatorAnnotations;
 import com.power.doc.model.DocJavaField;
-import com.thoughtworks.qdox.model.DocletTag;
-import com.thoughtworks.qdox.model.JavaAnnotation;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.JavaGenericDeclaration;
-import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaParameterizedType;
-import com.thoughtworks.qdox.model.JavaType;
-import com.thoughtworks.qdox.model.JavaTypeVariable;
+import com.thoughtworks.qdox.model.*;
 import com.thoughtworks.qdox.model.expression.AnnotationValue;
 import com.thoughtworks.qdox.model.expression.AnnotationValueList;
 import com.thoughtworks.qdox.model.expression.Expression;
@@ -46,13 +38,7 @@ import com.thoughtworks.qdox.model.impl.DefaultJavaParameterizedType;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -234,7 +220,6 @@ public class JavaClassUtil {
         return fieldList;
     }
 
-
     /**
      * get enum value
      *
@@ -282,26 +267,44 @@ public class JavaClassUtil {
     }
 
     public static String getEnumParams(JavaClass javaClass) {
-        List<JavaField> javaFields = javaClass.getEnumConstants();
-        StringBuilder stringBuilder = new StringBuilder();
-        for (JavaField javaField : javaFields) {
-            List<Expression> exceptions = javaField.getEnumConstantArguments();
-            stringBuilder.append(javaField.getName());
-            //enum value is not empty
-            if (CollectionUtil.isNotEmpty(exceptions)) {
-                stringBuilder.append(" -(");
-                for (int i = 0; i < exceptions.size(); i++) {
-                    stringBuilder.append(exceptions.get(i));
-                    if (i != exceptions.size() - 1) {
-                        stringBuilder.append(",");
-                    }
+        try {
+            List<JavaField> javaFields = javaClass.getEnumConstants();
+            StringBuilder stringBuilder = new StringBuilder();
+            for (JavaField javaField : javaFields) {
+                List<Expression> exceptions = javaField.getEnumConstantArguments();
+                //enum value is not empty
+                if (CollectionUtil.isNotEmpty(exceptions)) {
+                    stringBuilder.append(String.format("{\"value:\":%s,\"desc\":%s}", exceptions.get(0), exceptions.get(1)));
                 }
-                stringBuilder.append(")");
+                stringBuilder.append("<br/>");
             }
-            stringBuilder.append("<br/>");
+            return stringBuilder.toString();
+        } catch (Exception e) {
+            return "解析失败：" + javaClass.getSimpleName() + "可能存在关键字,如 record";
         }
-        return stringBuilder.toString();
     }
+    //
+    //public static String getEnumParams(JavaClass javaClass) {
+    //    List<JavaField> javaFields = javaClass.getEnumConstants();
+    //    StringBuilder stringBuilder = new StringBuilder();
+    //    for (JavaField javaField : javaFields) {
+    //        List<Expression> exceptions = javaField.getEnumConstantArguments();
+    //        stringBuilder.append(javaField.getName());
+    //        //enum value is not empty
+    //        if (CollectionUtil.isNotEmpty(exceptions)) {
+    //            stringBuilder.append(" -(");
+    //            for (int i = 0; i < exceptions.size(); i++) {
+    //                stringBuilder.append(exceptions.get(i));
+    //                if (i != exceptions.size() - 1) {
+    //                    stringBuilder.append(",");
+    //                }
+    //            }
+    //            stringBuilder.append(")");
+    //        }
+    //        stringBuilder.append("<br/>");
+    //    }
+    //    return stringBuilder.toString();
+    //}
 
     public static List<String> getEnumValues(JavaClass javaClass) {
         List<JavaField> javaFields = javaClass.getEnumConstants();
@@ -311,7 +314,6 @@ public class JavaClassUtil {
         }
         return enums;
     }
-
 
     /**
      * Get annotation simpleName
@@ -369,7 +371,6 @@ public class JavaClassUtil {
             return ((JavaParameterizedType) javaType).getActualTypeArguments();
         }
         return new ArrayList<>(0);
-
     }
 
     /**
@@ -597,4 +598,5 @@ public class JavaClassUtil {
         }
         return ignoreFields;
     }
+
 }

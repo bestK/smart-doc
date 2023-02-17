@@ -108,6 +108,7 @@ public class SpringMVCRequestMappingHandler {
                 return null;
             }
             shortUrl = StringUtil.removeQuotes(shortUrl);
+            System.out.println(">> " + method.getDeclaringClass().getSimpleName() + "." + method.getName());
             List<String> urls = DocUtil.split(shortUrl);
             if (urls.size() > 1) {
                 url = DocUrlUtil.getMvcUrls(serverUrl, contextPath + "/" + controllerBaseUrl, urls);
@@ -149,4 +150,5 @@ public class SpringMVCRequestMappingHandler {
         }
         return url;
     }
+
 }
