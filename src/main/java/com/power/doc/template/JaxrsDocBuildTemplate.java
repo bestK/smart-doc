@@ -427,7 +427,7 @@ public class JaxrsDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
             String mockValue = createMockValue(paramsComments, paramName, typeName, simpleTypeName);
             JavaClass javaClass = builder.getJavaProjectBuilder().getClassByName(fullTypeName);
             List<JavaAnnotation> annotations = parameter.getAnnotations();
-            List<String> groupClasses = JavaClassUtil.getParamGroupJavaClass(annotations);
+            Set<String> groupClasses = JavaClassUtil.getParamGroupJavaClass(annotations, builder.getJavaProjectBuilder());
             boolean isPathVariable = false;
             boolean isRequestBody = false;
             String strRequired = "false";
@@ -668,7 +668,7 @@ public class JaxrsDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                 paramName = StringUtil.camelToUnderline(paramName);
             }
             List<JavaAnnotation> annotations = parameter.getAnnotations();
-            List<String> groupClasses = JavaClassUtil.getParamGroupJavaClass(annotations);
+            Set<String> groupClasses = JavaClassUtil.getParamGroupJavaClass(annotations, configBuilder.getJavaProjectBuilder());
             boolean paramAdded = false;
             if (CollectionUtil.isNotEmpty(annotations)) {
                 for (JavaAnnotation annotation : annotations) {

@@ -508,7 +508,7 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
                 paramName = StringUtil.camelToUnderline(paramName);
             }
             List<JavaAnnotation> annotations = parameter.getAnnotations();
-            List<String> groupClasses = JavaClassUtil.getParamGroupJavaClass(annotations);
+            Set<String> groupClasses = JavaClassUtil.getParamGroupJavaClass(annotations, configBuilder.getJavaProjectBuilder());
             boolean paramAdded = false;
             boolean requestParam = false;
             for (JavaAnnotation annotation : annotations) {
@@ -805,7 +805,7 @@ public class SpringBootDocBuildTemplate implements IDocBuildTemplate<ApiDoc> {
             String mockValue = JavaFieldUtil.createMockValue(paramsComments, paramName, typeName, simpleTypeName);
             JavaClass javaClass = builder.getJavaProjectBuilder().getClassByName(fullTypeName);
             List<JavaAnnotation> annotations = parameter.getAnnotations();
-            List<String> groupClasses = JavaClassUtil.getParamGroupJavaClass(annotations);
+            Set<String> groupClasses = JavaClassUtil.getParamGroupJavaClass(annotations, builder.getJavaProjectBuilder());
             String strRequired = "false";
             boolean isPathVariable = false;
             boolean isRequestBody = false;
